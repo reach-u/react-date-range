@@ -41,11 +41,11 @@
     "classnames": "^2.2.6",
     "prop-types": "^15.7.2",
     "react-list": "^0.8.13",
-    "shallow-equal": "^1.2.1"
+    "shallow-equal": "^1.2.1",
+    "date-fns": "^3.0.6"
   },
   "peerDependencies": {
-    "date-fns": "3.0.6 || >=3.0.0",
-    "react": "^0.14 || ^15.0.0-rc || >=15.0"
+    "react": "^0.14 || ^15.0.0-rc || >=15.0 || >=16.0 || >=17.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.4",
