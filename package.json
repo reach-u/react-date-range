@@ -2,7 +2,7 @@
   "name": "@reach-u/react-date-range",
   "version": "2.0.2",
   "description": "A React component for choosing dates and date ranges.",
-  "main": "dist/index.js",
+  "module": "dist/index.js",
   "scripts": {
     "start": "yarn build:css & styleguidist server",
     "build": "yarn build:css & yarn build:js & styleguidist build",
@@ -44,6 +44,7 @@
     "shallow-equal": "^1.2.1",
     "date-fns": "^3.0.6"
   },
+  "types": "index.d.ts",
   "peerDependencies": {
     "react": "^0.14 || ^15.0.0-rc || >=15.0 || >=16.0 || >=17.0"
   },

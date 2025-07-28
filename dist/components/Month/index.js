@@ -1,31 +1,23 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _propTypes = _interopRequireDefault(require("prop-types"));
-var _DayCell = _interopRequireWildcard(require("../DayCell"));
-var _dateFns = require("date-fns");
-var _utils = require("../../utils");
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function (e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != typeof e && "function" != typeof e) return { default: e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n.default = e, t && t.set(e, n), n; }
-function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); } /* eslint-disable no-fallthrough */
+function _extends() { _extends = Object.assign ? Object.assign.bind() : function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+/* eslint-disable no-fallthrough */
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import DayCell, { rangeShape } from '../DayCell';
+import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, isBefore, isSameDay, isAfter, isWeekend, isWithinInterval, eachDayOfInterval } from 'date-fns';
+import { getMonthDisplayRange } from '../../utils';
 function renderWeekdays(styles, dateOptions, weekdayDisplayFormat) {
   const now = new Date();
-  return /*#__PURE__*/_react.default.createElement("div", {
+  return /*#__PURE__*/React.createElement("div", {
     className: styles.weekDays
-  }, (0, _dateFns.eachDayOfInterval)({
-    start: (0, _dateFns.startOfWeek)(now, dateOptions),
-    end: (0, _dateFns.endOfWeek)(now, dateOptions)
-  }).map((day, i) => /*#__PURE__*/_react.default.createElement("span", {
+  }, eachDayOfInterval({
+    start: startOfWeek(now, dateOptions),
+    end: endOfWeek(now, dateOptions)
+  }).map((day, i) => /*#__PURE__*/React.createElement("span", {
     className: styles.weekDay,
     key: i
-  }, (0, _dateFns.format)(day, weekdayDisplayFormat, dateOptions))));
+  }, format(day, weekdayDisplayFormat, dateOptions))));
 }
-class Month extends _react.PureComponent {
+class Month extends PureComponent {
   render() {
     const now = new Date();
     const {
@@ -36,9 +28,9 @@ class Month extends _react.PureComponent {
       disabledDates,
       disabledDay
     } = this.props;
-    const minDate = this.props.minDate && (0, _dateFns.startOfDay)(this.props.minDate);
-    const maxDate = this.props.maxDate && (0, _dateFns.endOfDay)(this.props.maxDate);
-    const monthDisplay = (0, _utils.getMonthDisplayRange)(this.props.month, this.props.dateOptions, this.props.fixedHeight);
+    const minDate = this.props.minDate && startOfDay(this.props.minDate);
+    const maxDate = this.props.maxDate && endOfDay(this.props.maxDate);
+    const monthDisplay = getMonthDisplayRange(this.props.month, this.props.dateOptions, this.props.fixedHeight);
     let ranges = this.props.ranges;
     if (displayMode === 'dateRange' && drag.status) {
       let {
@@ -55,36 +47,36 @@ class Month extends _react.PureComponent {
       });
     }
     const showPreview = this.props.showPreview && !drag.disablePreview;
-    return /*#__PURE__*/_react.default.createElement("div", {
+    return /*#__PURE__*/React.createElement("div", {
       className: styles.month,
       style: this.props.style
-    }, this.props.showMonthName ? /*#__PURE__*/_react.default.createElement("div", {
+    }, this.props.showMonthName ? /*#__PURE__*/React.createElement("div", {
       className: styles.monthName
-    }, (0, _dateFns.format)(this.props.month, this.props.monthDisplayFormat, this.props.dateOptions)) : null, this.props.showWeekDays && renderWeekdays(styles, this.props.dateOptions, this.props.weekdayDisplayFormat), /*#__PURE__*/_react.default.createElement("div", {
+    }, format(this.props.month, this.props.monthDisplayFormat, this.props.dateOptions)) : null, this.props.showWeekDays && renderWeekdays(styles, this.props.dateOptions, this.props.weekdayDisplayFormat), /*#__PURE__*/React.createElement("div", {
       className: styles.days,
       onMouseLeave: this.props.onMouseLeave
-    }, (0, _dateFns.eachDayOfInterval)({
+    }, eachDayOfInterval({
       start: monthDisplay.start,
       end: monthDisplay.end
     }).map((day, index) => {
-      const isStartOfMonth = (0, _dateFns.isSameDay)(day, monthDisplay.startDateOfMonth);
-      const isEndOfMonth = (0, _dateFns.isSameDay)(day, monthDisplay.endDateOfMonth);
-      const isOutsideMinMax = minDate && (0, _dateFns.isBefore)(day, minDate) || maxDate && (0, _dateFns.isAfter)(day, maxDate);
-      const isDisabledSpecifically = disabledDates.some(disabledDate => (0, _dateFns.isSameDay)(disabledDate, day));
+      const isStartOfMonth = isSameDay(day, monthDisplay.startDateOfMonth);
+      const isEndOfMonth = isSameDay(day, monthDisplay.endDateOfMonth);
+      const isOutsideMinMax = minDate && isBefore(day, minDate) || maxDate && isAfter(day, maxDate);
+      const isDisabledSpecifically = disabledDates.some(disabledDate => isSameDay(disabledDate, day));
       const isDisabledDay = disabledDay(day);
-      return /*#__PURE__*/_react.default.createElement(_DayCell.default, _extends({}, this.props, {
+      return /*#__PURE__*/React.createElement(DayCell, _extends({}, this.props, {
         ranges: ranges,
         day: day,
         preview: showPreview ? this.props.preview : null,
-        isWeekend: (0, _dateFns.isWeekend)(day, this.props.dateOptions),
-        isToday: (0, _dateFns.isSameDay)(day, now),
-        isStartOfWeek: (0, _dateFns.isSameDay)(day, (0, _dateFns.startOfWeek)(day, this.props.dateOptions)),
-        isEndOfWeek: (0, _dateFns.isSameDay)(day, (0, _dateFns.endOfWeek)(day, this.props.dateOptions)),
+        isWeekend: isWeekend(day, this.props.dateOptions),
+        isToday: isSameDay(day, now),
+        isStartOfWeek: isSameDay(day, startOfWeek(day, this.props.dateOptions)),
+        isEndOfWeek: isSameDay(day, endOfWeek(day, this.props.dateOptions)),
         isStartOfMonth: isStartOfMonth,
         isEndOfMonth: isEndOfMonth,
         key: index,
         disabled: isOutsideMinMax || isDisabledSpecifically || isDisabledDay,
-        isPassive: !(0, _dateFns.isWithinInterval)(day, {
+        isPassive: !isWithinInterval(day, {
           start: monthDisplay.startDateOfMonth,
           end: monthDisplay.endDateOfMonth
         }),
@@ -100,32 +92,32 @@ class Month extends _react.PureComponent {
 }
 Month.defaultProps = {};
 Month.propTypes = {
-  style: _propTypes.default.object,
-  styles: _propTypes.default.object,
-  month: _propTypes.default.object,
-  drag: _propTypes.default.object,
-  dateOptions: _propTypes.default.object,
-  disabledDates: _propTypes.default.array,
-  disabledDay: _propTypes.default.func,
-  preview: _propTypes.default.shape({
-    startDate: _propTypes.default.object,
-    endDate: _propTypes.default.object
+  style: PropTypes.object,
+  styles: PropTypes.object,
+  month: PropTypes.object,
+  drag: PropTypes.object,
+  dateOptions: PropTypes.object,
+  disabledDates: PropTypes.array,
+  disabledDay: PropTypes.func,
+  preview: PropTypes.shape({
+    startDate: PropTypes.object,
+    endDate: PropTypes.object
   }),
-  showPreview: _propTypes.default.bool,
-  displayMode: _propTypes.default.oneOf(['dateRange', 'date']),
-  minDate: _propTypes.default.object,
-  maxDate: _propTypes.default.object,
-  ranges: _propTypes.default.arrayOf(_DayCell.rangeShape),
-  focusedRange: _propTypes.default.arrayOf(_propTypes.default.number),
-  onDragSelectionStart: _propTypes.default.func,
-  onDragSelectionEnd: _propTypes.default.func,
-  onDragSelectionMove: _propTypes.default.func,
-  onMouseLeave: _propTypes.default.func,
-  monthDisplayFormat: _propTypes.default.string,
-  weekdayDisplayFormat: _propTypes.default.string,
-  dayDisplayFormat: _propTypes.default.string,
-  showWeekDays: _propTypes.default.bool,
-  showMonthName: _propTypes.default.bool,
-  fixedHeight: _propTypes.default.bool
+  showPreview: PropTypes.bool,
+  displayMode: PropTypes.oneOf(['dateRange', 'date']),
+  minDate: PropTypes.object,
+  maxDate: PropTypes.object,
+  ranges: PropTypes.arrayOf(rangeShape),
+  focusedRange: PropTypes.arrayOf(PropTypes.number),
+  onDragSelectionStart: PropTypes.func,
+  onDragSelectionEnd: PropTypes.func,
+  onDragSelectionMove: PropTypes.func,
+  onMouseLeave: PropTypes.func,
+  monthDisplayFormat: PropTypes.string,
+  weekdayDisplayFormat: PropTypes.string,
+  dayDisplayFormat: PropTypes.string,
+  showWeekDays: PropTypes.bool,
+  showMonthName: PropTypes.bool,
+  fixedHeight: PropTypes.bool
 };
-var _default = exports.default = Month;
+export default Month;
