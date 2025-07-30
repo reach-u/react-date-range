@@ -1,6 +1,6 @@
 {
   "name": "@reach-u/react-date-range",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "A React component for choosing dates and date ranges.",
   "module": "dist/index.js",
   "scripts": {

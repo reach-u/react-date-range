@@ -9,6 +9,21 @@ This component extends all the props of **[Calendar](#calendar)** component. In 
 |  **ranges**  |  array |
 
 
+#### Example: Empty view
+The default range name when not providing a range is `range1`
+```jsx inside Markdown
+import {useState} from 'react'
+const [state, setState] = useState([]);
+  
+<DateRange
+  editableDateInputs={false}
+  showDateDisplay={false}
+  onChange={item => setState([item.range1])}
+  moveRangeOnFirstSelection={false}
+  ranges={state}
+/>
+```
+
 #### Example: Editable Date Inputs
 ```jsx inside Markdown
 import {useState} from 'react'

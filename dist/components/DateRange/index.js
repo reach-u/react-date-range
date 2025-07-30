@@ -30,11 +30,11 @@ class DateRange extends Component {
       } = _this.props;
       const focusedRangeIndex = focusedRange[0];
       const selectedRange = ranges[focusedRangeIndex];
-      if (!selectedRange || !onChange) return {};
+      if (!onChange) return {};
       let {
         startDate,
         endDate
-      } = selectedRange;
+      } = selectedRange ?? {};
       const now = new Date();
       let nextFocusRange;
       if (!isSingleValue) {
@@ -102,11 +102,14 @@ class DateRange extends Component {
       const focusedRange = this.props.focusedRange || this.state.focusedRange;
       const focusedRangeIndex = focusedRange[0];
       const selectedRange = ranges[focusedRangeIndex];
-      if (!selectedRange) return;
       const newSelection = this.calcNewSelection(value, isSingleValue);
+      if (!selectedRange) {
+        newSelection.nextFocusRange = [0, 1];
+      }
+      const defaultRangeKey = selectedRange ? `range${focusedRangeIndex + 1}` : 'range1';
       onChange({
-        [selectedRange.key || `range${focusedRangeIndex + 1}`]: {
-          ...selectedRange,
+        [selectedRange?.key || defaultRangeKey]: {
+          ...(selectedRange ?? {}),
           ...newSelection.range
         }
       });
