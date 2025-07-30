@@ -118,10 +118,10 @@ class DateRange extends Component {
       this.setState({ preview: null });
       return;
     }
-    const { rangeColors, ranges } = this.props;
+    const { rangeColors, ranges, color } = this.props;
     const focusedRange = this.props.focusedRange || this.state.focusedRange;
-    const color = ranges[focusedRange[0]]?.color || rangeColors[focusedRange[0]] || color;
-    this.setState({ preview: { ...val.range, color } });
+    const resolvedColor = ranges[focusedRange[0]]?.color || rangeColors[focusedRange[0]] || color;
+    this.setState({ preview: { ...val.range, color: resolvedColor } });
   };
   render() {
     return (
